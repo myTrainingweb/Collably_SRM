@@ -1,0 +1,924 @@
+﻿@model PlusCP.Models.NewPO
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="~/Content/css/jquery.dataTables.colResize.css" rel="stylesheet" />
+<style>
+    
+    .Message {
+        height: 200px;
+        width: 500px
+    }
+
+    .custom-modal-header {
+        background-color: whitesmoke !important;
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #ccc;
+        border-radius: 10px !important;
+    }
+
+    .custom-modal-title {
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .custom-modal-header .close {
+        background: #002244;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+    .close:hover {
+        background: #023160 !important;
+    }
+    .table.dataTable {
+        font-family: Roboto, sans-serif; /* Change to desired font family */
+        font-size: 12px; /* Change to desired font size */
+    }
+
+    table.dataTable thead th {
+        background-color: whitesmoke !important; /* Change to your desired color */
+        color: #002244; /* Change to desired text color */
+        height: 33px;
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    /* Change odd row background color */
+    table.dataTable tbody tr:nth-child(odd) {
+        background-color: white; /* Change to your desired color */
+    }
+
+    /* Change even row background color */
+    table.dataTable tbody tr:nth-child(even) {
+        background-color: #ffffff; /* Change to your desired color */
+    }
+
+
+    .table-container {
+        height: 200px; /* Set the desired fixed height */
+        overflow-y: auto;
+    }
+
+    table > thead > tr > th {
+        background-color: gray !important;
+        color: white;
+    }
+
+    table.table thead th {
+        background-color: white !important; /* Change to your desired color */
+        color: #14149F; /* Change to desired text color */
+        font-size: 15px;
+        font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    table.table tbody td {
+        background-color: white !important; /* Change to your desired color */
+        font-size:15px;
+        font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+     #btnSend:hover {
+        background-color: #023160 !important;
+        color: white !important;
+
+    }
+    .t-head {
+        color: #023160;
+    }
+    .modal-content {
+        border-radius: 25px !important;
+    }
+    .box-header {
+        background-color: white !important;
+        color: black !important;
+        border-bottom: 2px solid #023160;
+    }
+    .txtSearch-frame {
+        border: 2px solid #023160 !important;
+    }
+    .btn-box-tool {
+        color: black !important;
+    }
+</style>
+<div id="parentDiv" class="container-fluid">
+    <input id="rptCode" type="hidden" value="019" />
+    <input id="rptTitle" type="hidden" value="@ViewBag.ReportTitle" />
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <div id="dataList" class="box panel panel-default">
+            <div class="box-header with-border">
+
+                <button type="button" class="btn btn-box-tool" title="Refresh Page" onclick="LoadEmptyGrid();">
+                    <span class="fas fa-redo-alt fa-lg"></span>
+                </button>
+
+                <h6 class="box-title"><strong>@ViewBag.ReportTitle  </strong><strong id="filterString"></strong></h6>
+                <button id="btnUpdate" style="margin-left:100px; display:none" type="button" class="btn btn-secondary">Update</button>
+                <div id="buttons" class="box-tools pull-right">
+
+                </div>
+
+                @* Badges Working *@
+            </div>
+            <div class="box-body" id="lstP">
+                <table id="lstData" class="table table-striped text-sm table-hover" width="100%">
+                    <thead class="sorted-asc">
+                        <tr>
+                            <th></th>
+                            <th></th>
+
+                            <th></th>
+                            <th class="notexport"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="notexport"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            @*<th></th>*@
+                        </tr>
+                    </thead>
+                    @*<tbody id="tblBody"></tbody>*@
+                    <tfoot>
+                        <tr>
+                            @*<th>Total :</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>*@
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2" id="rghtPanel">
+        <h4 style="padding-top:300px; padding-left:180px;"></h4>
+
+    </div>
+</div>
+
+<!-- Modal Email Entry -->
+<div id="EmailEntry" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <!-- Increased modal width -->
+        <div class="modal-content">
+            <div class="custom-modal-header text-white">
+                <h5 class="custom-modal-title" style="">Purchase Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                @*<h4 class="" style="padding-left:4px; padding-top:2px" id="exampleModalLabel">Purchase Order Details</h4>*@
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Left side with green background color -->
+                        <div class="row">
+                            <!-- Left side (Table Grid) -->
+                            <div class="col-md-12 table-container">
+
+                                <table id="dataTable" class="table table-striped text-sm table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="t-head">PO#</th>
+                                            <th class="t-head">Price</th>
+                                            <th class="t-head">Qty</th>
+                                            <th class="t-head">Due Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th data-sortable="true">417-1-1</th>
+                                            <th class="text-center">1</th>
+                                            <th class="text-center">13</th>
+                                            <th class="text-right">2023.03.21</th>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Right side -->
+                            @*<div class="col-xs-3"></div>*@
+                            <div class="col-xs-5">
+                                <div class="form-group">
+                                    <label>Email:</label>
+                                    @*@Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { placeholder = "Email", @class = "form-control input-sm" } })*@
+                                    @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { placeholder = "Email", @class = "form-control input-sm", pattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}" } })
+                                    @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="contactReason">Contact Reason</label>
+                                    <select class="form-control" id="contactReason">
+                                        <option value="Confirmation">Confirmation</option>
+                                        <option value="Change">Change</option>
+                                        <option value="Update">Update</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div style="margin-bottom:5px;">
+                                    <label>Message</label>
+                                    @Html.TextAreaFor(model => model.Message, new { style = "height: 130px; width: 540px; background: none !impoortant", htmlAttributes = new { placeholder = "Email Body", @class = "form-control" } })
+                                    <label id="lblMsg1" style="color:green"></label>
+                                </div>
+                            </div>
+                            @*<div class="col-xs-3"></div>*@
+                        </div>
+
+
+
+                        @* Previous Work *@
+                        <div class="col-xs-6" style="background-color:#F5F5F5; display:none">
+                            <!-- Green background -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Buyer Company:</label>
+                                        @Html.EditorFor(model => model.BuyerCompany, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Buyer Company", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Buyer Name:</label>
+                                        @Html.EditorFor(model => model.BuyerName, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Buyer Name", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Purchase Order:</label>
+                                        @Html.EditorFor(model => model.PONo, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Purchase Order", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Line:</label>
+                                        @Html.EditorFor(model => model.Line, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Line", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Release:</label>
+                                        @Html.EditorFor(model => model.Release, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Release", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Part No.:</label>
+                                        @Html.EditorFor(model => model.PartNo, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Part No", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Part Desc:</label>
+                                        @Html.EditorFor(model => model.PartDesc, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Part Desc", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>UOM:</label>
+                                        @Html.EditorFor(model => model.UOM, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "UOM", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Order Date:</label>
+                                        @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Order Date", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Due Date:</label>
+                                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Due Date", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Qty:</label>
+                                        @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Qty", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Price:</label>
+                                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Price", disabled = "disabled" } })
+                                    </div>
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnCancel" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btnSend" type="button" class="btn" style="background-color:#002244;color:white;">Sent</button>
+                    <label id="VendorId" style="visibility:hidden" hidden></label>
+                    <label id="VendorName" style="visibility:hidden" hidden></label>
+                    <label id="BuyerId" style="visibility:hidden" hidden></label>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Email Entry -->
+<div id="AwaitingDtl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xs" role="document">
+        <div class="modal-content">
+            <div class="custom-modal-header bg-primary text-white">
+                <h5 class="custom-modal-title">Awaiting response email details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12" style="background-color:#F5F5F5">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email Created On:</label>
+                                        @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Buyer Company", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Vendor Email:</label>
+                                        @Html.EditorFor(model => model.VendorEmail, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "Buyer Name", disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAwaitingCancel" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.fn.dataTable.render.ellipsisAdr = function (cutoff) {
+        return function (data, type, row) {
+            if (type === 'display') {
+                var str = data.toString().replace(/(\r\n|\n|\r|'|)/gm, "");
+
+                var header = "Supplier";
+
+                return str.length < cutoff ?
+                    str :
+                    str.substr(0, cutoff - 1) + '<a href="#" onclick="showModalForZPL(\'' + header + '\', \'' + str + '\')"> More</a>';
+            }
+            // Search, order and type can use the original data
+            return data;
+        };
+    };
+    $.fn.dataTable.render.ellipsisAdr1 = function (cutoff) {
+        return function (data, type, row) {
+            if (type === 'display') {
+                var str = data.toString().replace(/(\r\n|\n|\r|'|)/gm, "");
+
+                var header = "Line Description";
+
+                return str.length < cutoff ?
+                    str :
+                    str.substr(0, cutoff - 1) + '<a href="#" onclick="showModalForZPL(\'' + header + '\', \'' + str + '\')"> More</a>';
+            }
+            // Search, order and type can use the original data
+            return data;
+        };
+    };
+
+    function LoadEmptyGrid() {
+        $('#buttons').empty();
+        LoadData();
+    }
+
+    LoadData();
+    ToggleDataList(false);
+    function LoadData() {
+        
+        //$('#tblBody').empty();
+
+        $('#option').modal('hide');
+        var isSingleRow = false;
+       // var POStatus = $('#POStatus').val();
+        var POStatus = '@Request.QueryString["POStatus"]';
+        $('#filterString').append('');
+        $('#filterString').val('');
+
+
+
+        $.ajax({
+
+            cache: false,
+            type: 'GET',
+            url: '/NewPO/GetList',
+            data: {
+                POStatus: POStatus,
+            },
+            datatype: JSON,
+            success: function (data) {
+                $('#filterString').append('');
+                $('#filterString').append(data.filterString);
+                $("#lstData").empty();
+                //$('#tblBody').empty();
+                //$('#lstPO').DataTable().clear();
+
+                if (!isSingleRow) {
+                    var columnDef = [
+                        { "data": "BuyerEmailSent", "title": "BuyerSentEmail", "visible": false },
+                        { "data": "VendorEmailSent", "title": "VendorSentEmail", "visible": false },
+                        { "data": "Resent", "title": "Resend Email", "visible": false },
+                        { "data": "ResentCreatedDate", "title": "Resend CreatedOn", "visible": false  },
+                        { "data": "ResentVendorEmail", "title": "Resend Vendor Email", "visible": false  },
+                        //{
+                        //    "data": "Updates", "title": "Updates", "width": "70px", "className": "text-center",
+                        //    render: function (data, type, row) {
+                        //        var url = '<a href="#" onclick="OpenView(\'\\\\NewPO\\\\GetUpdateNew?PONo=' + row["PONumber"] + '\',\'rghtPanel\')">' + data + 'Update</a>';
+                        //        return url;
+                        //    },
+
+                        //},
+
+                        {
+                            "data": "Message", "title": "Message", "width": "90px", "className": "text-center",
+                            render: function (data, type, row) {
+                                var url = '';
+
+                                if (row["PODetail_OrderQty"] != row["PORel_ReceivedQty"]) {
+                                    if (row["BuyerEmailSent"] != "" && row["Awaiting"] != "") {
+                                        //open POPUP show Email Details.
+                                        url = '<a href="#" onclick="AwaitingEmail(\'' + row["ResentCreatedDate"] + '\', \'' + row["ResentVendorEmail"] + '\')">Awaiting Email</a>';
+                                        return url;
+                                    }
+                                    else if (row["BuyerEmailSent"] != "" && row["VendorEmailSent"] != "") {
+                                        var url = '<a href="#" onclick="OpenView(\'\\\\NewPO\\\\GetUpdateNew?PONo=' + row["PONumber"] + '\',\'rghtPanel\')">' + data + 'Action Required</a>';
+                                        return url;
+
+                                    }
+
+                                    else if (row["BuyerEmailSent"] != "" && row["Resent"] != "") {
+                                        var email = "yousuf";
+                                        url = '<a href="#" onclick="Email(\'' + email + '\', \'' + row["PurAgent_Name"] + '\', \'' + row["POHeader_PONum"] + '\', \'' + row["PODetail_POLine"] + '\', \'' + row["PORel_PORelNum"] + '\', \'' + row["PODetail_PartNum"] + '\', \'' + row["PODetail_LineDesc"] + '\', \'' + row["PODetail_IUM"] + '\', \'' + row["POHeader_OrderDate"] + '\', \'' + row["PORel_DueDate"] + '\', \'' + row["PODetail_OrderQty"] + '\', \'' + row["Calculated_BaseTotalAmount"] + '\', \'' + row["Vendor_VendorID"] + '\', \'' + row["Vendor_Name"] + '\', \'' + row["POHeader_BuyerID"] + '\')">Resent Email</a>';
+                                        return url;
+                                    }
+                                    else {
+                                        var email = "yousuf";
+                                        url = '<a href="#" onclick="Email(\'' + email + '\', \'' + row["PurAgent_Name"] + '\', \'' + row["POHeader_PONum"] + '\', \'' + row["PODetail_POLine"] + '\', \'' + row["PORel_PORelNum"] + '\', \'' + row["PODetail_PartNum"] + '\', \'' + row["PODetail_LineDesc"] + '\', \'' + row["PODetail_IUM"] + '\', \'' + row["POHeader_OrderDate"] + '\', \'' + row["PORel_DueDate"] + '\', \'' + row["PODetail_OrderQty"] + '\', \'' + row["Calculated_BaseTotalAmount"] + '\', \'' + row["Vendor_VendorID"] + '\', \'' + row["Vendor_Name"] + '\', \'' + row["POHeader_BuyerID"] + '\')">Email</a>';
+                                        return url;
+                                    }
+
+
+                                }
+                                else {
+                                    var message = 'Order Qty is equal to the Received Qty';
+                                    url = '<a href="#" onclick="AlertPopup(\'' + message + '\')">Email</a>';
+                                    return url;
+                                }
+
+                            }
+
+                        },
+
+                        { "data": "Vendor_Name", "title": "Supplier", "visible": false},
+                        { "data": "Vendor_Name", "title": "Supplier", "render": $.fn.dataTable.render.ellipsisAdr(15), "width": "100px" },
+                        {
+                            "data": "PONumber", "title": "PO", "width": "50px" },
+
+                        { "data": "PODetail_PartNum", "title": "Part No.", "width": "90px" },
+                        { "data": "PODetail_LineDesc", "title": "Line Desc.", "visible": false},
+                        { "data": "PODetail_LineDesc", "title": "Line Desc.", "render": $.fn.dataTable.render.ellipsisAdr1(12), "width": "110px" },
+
+                        { "data": "PODetail_IUM", "title": "IUM", "width": "30px", "className": "text-center" },
+                        { "data": "PODetail_OrderQty", "title": "Order Qty", "width": "60px" },
+                        { "data": "PORel_ReceivedQty", "title": "Rcvd. Qty", "width": "60px" },
+                        { "data": "RcvDtl_OurQty", "title": "Our Qty", "width": "60px" },
+                        { "data": "PORel_ArrivedQty", "title": "Arrived Qty", "width": "80px" },
+                        { "data": "POHeader_OrderDate", "title": "Order Date", "width": "70px", "className": "text-right" },
+                        { "data": "PORel_DueDate", "title": "Due Date", "width": "70px", "className": "text-right" },
+                        { "data": "RcvDtl_ArrivedDate", "title": "Arrived Date", "width": "80px", "className": "text-right" },
+                        { "data": "Calculated_BaseTotalAmount", "title": "Amount", "width": "50px", "className": "text-right" },
+                        { "data": "POHeader_PONum", "title": "PO", "width": "50px", "visible": false  },
+                        { "data": "PODetail_POLine", "title": "Line", "width": "50px", "visible": false  },
+                        { "data": "PORel_PORelNum", "title": "Rel", "width": "50px", "visible": false  },
+                        { "data": "Vendor_VendorID", "title": "Vendor Id", "width": "60px", "visible": false },
+                        { "data": "POHeader_BuyerID", "title": "Buyer Id", "width": "60px", "visible": false  },
+                        { "data": "POHeader_Approve", "title": "Approve", "width": "90px", "visible": false },
+                        { "data": "POHeader_TermsCode", "title": "Terms Code", "width": "90px", "visible": false },
+                        { "data": "Calculated_POType", "title": "PO Type", "width": "50px", "visible": false },
+                        { "data": "POHeader_VendorNum", "title": "Vendor No.", "width": "90px", "visible": false },
+                        { "data": "PurAgent_Name", "title": "Agent Name", "width": "150px", "visible": false },
+                        { "data": "PORel_WarehouseCode", "title": "Warehouse Code", "width": "150px", "visible": false },
+                        { "data": "PORel_PromiseDt", "title": "Promise Date", "width": "120px", "visible": false },
+                        { "data": "Calculated_BaseOpenAmount", "title": "Base Open Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_Rpt1OpenAmount", "title": "Rpt1 Open Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_Rpt2OpenAmount", "title": "Rpt2 Open Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_Rpt3OpenAmount", "title": "Rpt3 Open Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_BaseTotalAmount", "title": "Base Total Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_Rpt1TotalAmount", "title": "Rpt1 Total Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_Rpt2TotalAmount", "title": "Rpt2 Total Amount", "width": "150px", "visible": false },
+                        { "data": "Calculated_Rpt3TotalAmount", "title": "Rpt3 Total Amount", "width": "150px", "visible": false },
+
+                        //{ "data": "RowIdent", "title": "RowIdent", "width": "150px", "visible": false },
+
+
+                    ]
+
+
+
+
+                    ToggleDataList(true);
+                    //MakeDataGrid('lstPO', data.lstPO, 0, columnDef, true, true);
+                   // MakeDataGrid('lstData', data.lstPO, 0, columnDef, true, false, false, false);
+                    MakeDataGridForTraining('lstData', data.lstPO, 0, columnDef, 'buttons', true, true, false, false);
+
+
+                     $('.dropdown-toggle').dropdown();
+                }
+                if (data["ErrorMessage"] != null) {
+                    $('.dataTables_empty > p').text(data["ErrorMessage"]);
+                }
+            },
+            onerror: function (r) { r },
+            failure: function (r) { r }
+        });
+
+
+    }
+    function showModalForZPL(head, str) {
+        $('#commentsheader').html(head);
+        $('#commentsbody').html('<text rows="15" cols="78" name="usrtxt" wrap="hard"> "' + str + '" </text> ');
+        $('#comments').modal('show');
+    }
+
+    function Email(email, buyerName, PONum, Line, Rel, partNo, partDesc, UOM, orderDate, dueDate, Qty, Price, vendorId, VendorName, BuyerId) {
+
+        $('#lblMsg1').empty();
+        $('#EmailId').val('');
+        $('#Message').val('');
+
+       var ppO = $('#PONo').val(PONum);
+        $('#Line').val(Line);
+        $('#Release').val(Rel);
+        $('#PartNo').val(partNo);
+        $('#PartDesc').val(partDesc);
+        $('#UOM').val(UOM);
+        $('#OrderDate').val(orderDate);
+        $('#DueDate').val(dueDate);
+        $('#Qty').val(Qty);
+        $('#Price').val(Price);
+        $('#BuyerName').val(buyerName);
+
+        $('#VendorId').val(vendorId);
+        $('#VendorName').val(VendorName);
+        $('#BuyerId').val(BuyerId);
+
+        $('#showTitle').empty();
+        $('#showTitle').append("Email");
+
+        $('#EmailEntry').modal('show');
+
+
+    }
+    function AwaitingEmail(CreatedOn, VendorEmail) {
+        $('#CreatedOn').val('');
+        $('#VendorEmail').val('');
+
+        $('#CreatedOn').val(CreatedOn);
+        $('#VendorEmail').val(VendorEmail);
+        $('#AwaitingDtl').modal('show');
+    }
+    function AlertPopup(message) {
+        alert(message);
+    }
+    $('#btnCancel').click(function () {
+        $('#lblMsg').empty();
+        $('#EmailEntry').modal('hide');
+    });
+
+    $('#btnSend').click(function () {
+        $('#lblMsg1').empty();
+
+        var PONo = $('#PONo').val();
+        var Line = $('#Line').val();
+        var Release = $('#Release').val();
+        var PartNo = $('#PartNo').val();
+        var PartDesc =  $('#PartDesc').val();
+        var UOM = $('#UOM').val();
+        var OrderDate = $('#OrderDate').val();
+        var DueDate = $('#DueDate').val();
+        var Qty = $('#Qty').val();
+        var Price = $('#Price').val();
+        var BuyerId = $('#BuyerId').val();
+        var VendorId = $('#VendorId').val();
+        var VendorName = $('#VendorName').val();
+        var Receiveremail = $('#EmailId').val();
+
+        var contactReason = $('#contactReason :selected').text();
+
+        var message = $('#Message').val();
+
+        $.ajax({
+
+            cache: false,
+            type: 'GET',
+            url: '/NewPO/SendEmail',
+            data: {
+                PONo: PONo,
+                Line: Line,
+                Release: Release,
+                PartNo: PartNo,
+                PartDesc: PartDesc,
+                UOM: UOM,
+                OrderDate: OrderDate,
+                DueDate: DueDate,
+                Qty: Qty,
+                Price: Price,
+                VendorId: VendorId,
+                VendorName: VendorName,
+                BuyerId: BuyerId,
+                Receiveremail: Receiveremail,
+                contactReason: contactReason,
+                message: message,
+            },
+            datatype: JSON,
+            success: function (data) {
+                if (data == "Send") {
+                    $('#lblMsg1').append('Email has been sent');
+                   // $('#EmailEntry').modal('hide');
+                    LoadData();
+                }
+            },
+            onerror: function (r) { r },
+            failure: function (r) { r }
+        });
+
+    });
+
+    $('#btnUpdate').click(function () {
+
+        OpenPage('\\NewPO\\SupplierUpdate?menuTitle= Update' + '&rptCode=' + '@Request.QueryString["rptCode"]');
+        //OpenView('PO\\SupplierUpdate?menuTitle=update','_blank');
+        //window.open('/PO/SupplierUpdate?menuTitle=update','_blank');
+
+    });
+    function MakeDataGridForTraining(tableId, data, tableHeight, columns, buttonId, search, isScrollX, footerFunction, isFramed, detailed, reportTitleId, rowSelection, lstHeight) {
+        var isFooter = footerFunction === undefined || footerFunction === false ? false : true;
+        var isFramed = isFramed === undefined || isFramed === false ? false : true;
+        var isDetailed = detailed === undefined ? false : true;
+        var reportTitle = '';
+
+        if (reportTitleId === undefined)
+            reportTitle = $('.box-title').text();
+        else
+            reportTitle = reportTitleId;
+
+        var gridHeight = 0;
+
+        isScrollX = isScrollX === undefined ? false : true;
+        if (search === undefined) { search = true; }
+
+        var gridButtonsClass = '';
+        var gridSearchBoxClass = '';
+        if (isDetailed === true) {
+            gridButtonsClass = 'btn-header btn-box-tool';
+            gridSearchBoxClass = 'bg-white';
+            gridButtonSize = 20;
+        }
+        else {
+            gridButtonsClass = 'btn-header btn-box-tool';
+            gridSearchBoxClass = 'btn-box-tool bg-white txtSearch';
+            gridButtonSize = 20;
+        }
+
+        var boxtool;
+        if (search === true) {
+            if (isFramed) {
+                $('#trHeadSearch').empty();
+                boxtool = '<input class="txtSearch-frame" id="txtFrameSearch" type="text" placeholder="Search.." style="padding-left: 10px !important;" >';
+                $('#trHeadSearch').append(boxtool);
+            }
+            else {
+                $('#' + buttonId).empty();
+                boxtool = '<input class="txtSearch-frame" id="txtFrameSearch' + tableId + '" type="text" placeholder="Search.." style="padding-left: 10px !important;" >';
+                $('#' + buttonId).append(boxtool);
+            }
+        }
+        else {
+            if (isFramed) {
+                $('#trHeadSearch').empty();
+                boxtool = '<input class="txtSearch-frame" id="txtFrameSearch" type="text" placeholder="Search.." style="padding-left: 10px !important;" >';
+                $('#trHeadSearch').append(boxtool);
+            }
+            else {
+                $('#' + buttonId).empty();
+
+            }
+        }
+
+        var table = $('#' + tableId).DataTable({
+            order: [],
+            createdRow: rowSelection,         // add Parameter for row selection in PO Detail // Added By Tahir
+            data: data,
+            columns: columns,
+            paging: true,
+            ordering: true,
+            searching: search,
+            deferRender: true,
+            destroy: true,
+            pagingType: 'full',
+            pageLength: 100,
+            scrollCollapse: false,
+            scrollX: isScrollX,
+            colReorder: true,
+            orderClasses: false,
+            deferRender: true,
+            select: true,
+            colResize: true,
+            //scrollY: gridHeight,
+
+            footerCallback: footerFunction,
+            language: {
+                emptyTable: "<p style=\"text-align:left;\">No record(s) found.</p>",
+                zeroRecords: "<p style=\"text-align:left;\">No matching record(s) found</p>",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                oPaginate: {
+                    sNext: '<i class="fa fa-forward"></i>',
+                    sPrevious: '<i class="fa fa-backward"></i>',
+                    sFirst: '<i class="fa fa-step-backward"></i>',
+                    sLast: '<i class="fa fa-step-forward"></i>'
+                }
+            },
+            "dom": "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-3'i><'#designedBy.col-sm-7'><'col-sm-2'p>>",
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    footer: true,
+                    text: '<span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x" style="color: rgb(244, 164, 37);"></i><i class="fa fa-copy fa-stack-1x" style="color: white;"></i></span></span>',
+                    titleAttr: 'Copy',
+                    title: reportTitle,
+                    filename: 'DataExport',
+                    exportOptions: {
+                        //columns: ':visible'
+                        columns: 'th:not(.notexport)' // Excluding columns while exporting
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    footer: true,
+                    text: '<span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x" style="color: rgb(0, 179, 98);"></i><i class="fa fa-file-excel fa-stack-1x" style="color: white;"></i></span></span>',
+                    titleAttr: 'Export to excel',
+                    title: reportTitle,
+                    filename: 'DataExport', //Added By Tahir
+                    exportOptions: {
+                        //columns: ':visible'
+                        columns: 'th:not(.notexport)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    footer: true,
+                    text: '<span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x" style="color: rgb(0, 204, 255);"></i><i class="fa fa-print fa-stack-1x" style="color: white;"></i></span></span>',
+                    titleAttr: 'Print',
+                    title: '',
+                    messageTop: function () { return '<h4>' + reportTitle + '</h4>'; },
+                    filename: 'DataExport',
+                    exportOptions: {
+                        // columns: ':visible'
+                        columns: 'th:not(.notexport)'
+                    }
+                }
+            ],
+            select: true
+        });
+        table.buttons().container()
+            .appendTo('#buttons');
+
+        table.button(0).nodes().removeClass('btn btn-default buttons-copy buttons-html5');
+        table.button(0).nodes().addClass(gridButtonsClass);
+
+        table.button(1).nodes().removeClass('btn btn-default buttons-excel buttons-html5');
+        table.button(1).nodes().addClass(gridButtonsClass);
+
+        table.button(2).nodes().removeClass('btn btn-default buttons-excel buttons-html5');
+        table.button(2).nodes().addClass(gridButtonsClass);
+
+        var dsgndby = $('.modal-footer > #designedby ').html();
+
+        if (dsgndby === "") {
+            $('#designedBy').html($('.desgndBy').html());
+        }
+
+        var layoutHeader = $('nav').innerHeight();
+        var cardHeader = $('.box-header').innerHeight();
+        var tableHeader = $('.dataTables_scrollHead').innerHeight();
+        var tableFooter = 10;
+        var cardFooterH = 30;
+
+        if (isFooter === true)
+            tableFooter = $('.dataTables_scrollFoot').innerHeight();
+
+
+        var parentHeight = $('#' + lstHeight).innerHeight();
+        if (parentHeight == undefined)
+            parentHeight = window.innerHeight;
+        else
+            parentHeight = $('#' + lstHeight).innerHeight();
+
+        if (isFooter === true)
+            tableFooter = $('#' + tableId + ' > tfoot').innerHeight();
+
+        var browserHeight = parentHeight;
+        if (tableHeight === 0) {
+            if (layoutHeader === undefined)
+                gridHeight = browserHeight - (cardHeader + tableHeader + tableFooter + cardFooterH);
+            else
+                gridHeight = browserHeight - (layoutHeader + cardHeader + tableHeader + tableFooter + cardFooterH);
+        }
+        else { gridHeight = tableHeight; }
+
+        var topHeader = $('#topHeader').innerHeight();
+        if (topHeader > 0)
+            gridHeight = gridHeight - (topHeader + 1);
+
+        $('.dataTables_scrollBody').css('height', gridHeight + 'px');
+        table.columns.adjust().draw();
+
+        $('#txtFrameSearch' + tableId).on('keyup change', function () {
+            table.search(this.value).draw();
+        });
+        $('.dataTables_filter').hide();
+        table.columns.adjust().draw();
+
+
+        //return table;
+    }
+
+</script>

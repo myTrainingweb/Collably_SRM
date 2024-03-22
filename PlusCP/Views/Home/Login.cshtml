@@ -1,0 +1,546 @@
+﻿@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@model PlusCP.Models.cAuth
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+
+@*<link href="~/Content/css/login.css" rel="stylesheet" />*@
+<link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/css/font-awesome.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+    /* Global Variables */
+    :root {
+        --color1: #f5f5f54d;
+        --color2: #526470;
+        --color2Hover: #013e63;
+        --color3: #fff;
+        --color4: #015981eb;
+        --color5: #b2bec5c2;
+    }
+
+    /* Reset Default Settings */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    body {
+        background-color: #c8dae9;
+        min-height: 100vh;
+        font-family: 'Montserrat', sans-serif;
+        /* Flex */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        background-color: var(--color3);
+        width: 750px;
+        height: 450px;
+        border-radius: 60px;
+        overflow: hidden;
+        /* Flex */
+        display: flex;
+        padding-left: 0px !important;
+    }
+
+    .container__svgs {
+        background-color: #002244;
+        width: 50%;
+        /* Flex */
+        display: flex;
+        /*        flex-direction: column;*/
+        justify-content: center;
+        align-items: center;
+        border-radius: 60px !important;
+    }
+
+    .container__svg1 {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 10px;
+    }
+
+    .container__svg2 {
+        width: 170px;
+        height: 18px;
+    }
+
+    .container__content {
+        width: 50%;
+        position: relative;
+        /* Flex */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container__form {
+        margin-bottom: 15px;
+        /* Flex */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container__inputField {
+        background-color: transparent;
+        width: 220px;
+        padding: 0 0 10px 5px;
+        font-size: 15px;
+        letter-spacing: 1px;
+        /* Border */
+        border: none;
+        border-bottom: solid 1px var(--color2);
+        border-radius: 0;
+    }
+
+        .container__inputField:first-of-type {
+            margin-bottom: 35px;
+        }
+
+        .container__inputField:nth-of-type(2) {
+            margin-bottom: 40px;
+        }
+
+        .container__inputField:focus-visible {
+            border-bottom: solid 2px var(--color2Hover);
+            outline: none;
+        }
+
+    .container__sumbitButton {
+        background-color: white;
+        color: black;
+        width: 220px;
+        padding: 15px 0;
+        font-size: 14px;
+        cursor: pointer;
+        /* Text */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        /* Border */
+        border: none;
+        border-radius: 50px;
+        margin-top: 10px !important;
+    }
+
+    .btn-signin {
+        background-color: #c8dae9;
+        color: black;
+        width: 220px;
+        padding: 15px 0;
+        font-size: 14px;
+        cursor: pointer;
+        /* Text */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        /* Border */
+        border: none;
+        border-radius: 50px;
+        margin-top: 10px !important;
+    }
+
+        .btn-signin:hover {
+            background-color: #002244;
+            color: white;
+        }
+
+   
+
+    .container__sumbitButton:hover {
+        background-color: #c8dae9;
+        
+    }
+
+    .container__links {
+        /* Position */
+        position: absolute;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        /* Flex */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px !important;
+    }
+
+    .container__link {
+        color: var(--color2);
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+        .container__link:hover {
+            text-decoration: underline;
+        }
+
+    .container__separator {
+        background-color: var(--color2);
+        width: 1px;
+        height: 10px;
+        margin: 0 15px;
+    }
+</style>
+<body>
+    @using (Html.BeginForm("Login", "Home"))
+    {
+        <div style="padding-top:1px;">
+            @*<button type="button" class="btn btn-success btn pull-right" style="margin-left:5px; margin-right:60px;">My Clover</button>
+                <button otype="button" class="btn btn-primary btn pull-right" style="margin-left:100px;">Heaven</button>*@
+            <div class="text-center">
+                <a href="#" target="_blank"><img src="~/Content/Images/SRMLogo.png" style=" margin-left:8px;margin-top:6px; height:70px; margin-bottom:3px;" /></a>
+            </div>
+        </div>
+        <div class='container'>
+            <div class='container__svgs'>
+                <div>
+                    <h2 style="color:white;">Click here to Sign Up</h2>
+                    <button type="button" class="container__sumbitButton" data-toggle="modal" data-target="#exampleModalCenter">
+                        Sign Up
+                    </button>
+                    @*<input type='submit' value='Signup' class='container__sumbitButton'>*@
+                </div>
+
+            </div>
+
+            <div class='container__content'>
+                <div class='container__form'>
+                    @Html.TextBoxFor(model => model.SigninId, htmlAttributes: new
+               {
+                   @autofocus = "autofocus",
+                   @class = "container__inputField",
+                   @placeholder = "Username",
+                   @id = "txtUserName",
+                   pattern = "^[a-zA-Z0-9-_@.]+$",
+                   oninvalid = "this.setCustomValidity('User is invalid')",
+                   oninput = "this.setCustomValidity('')"
+               })
+                    @* <input type='text' name='username' placeholder='Username' class='container__inputField'>*@
+
+                    @Html.PasswordFor(model => model.Password, htmlAttributes: new
+                    {
+                        @class = "container__inputField",
+                    @placeholder = "Password",
+                    @id = "txtPwd"
+               })
+                    @Html.ValidationMessageFor(model => model.Password)
+                    @* <input type='password' name='password' placeholder='Password' class='container__inputField'>*@
+                    <div align="center" style="margin-top: -30px !important;">
+
+                        @Html.Captcha(5)
+                    </div>
+                    <button id="btnSubmit" type="submit" class="btn-signin mt-2">Sign In</button>
+
+                    @*<input type='submit' value='Login' class='container__sumbitButton'>*@
+                </div>
+                <div class='container__links'>
+                    <a href='#emptyLink' class='container__link'>Need Account?</a>
+                    <span class='container__separator'></span>
+                    <a href='#myModal' data-toggle="modal" class='container__link'>Forget Password?</a>
+                </div>
+            </div>
+        </div>
+
+
+
+        //Forgot Passoword Modal
+
+        <div class="modal bd-example-modal-sm" tabindex="-1" id="myModal" role="dialog" style=" top: 25%; left: 25%;">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content modal-sm">
+                    <div class="header" style="background-color: #002244;
+">
+                        <button type="button" class="close" data-dismiss="modal" style="color:white;">&times;</button>
+                        <h4 class="modal-title" style="color:white;text-align:center;">Forgot Password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Username:</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter Username" autofocus="autofocus" />
+                        </div>
+                        @*<div class="form-group">
+                                <label>Vendor Id:</label>
+                                <input type="text" class="form-control" id="ProgramId">
+                            </div>*@
+                    </div>
+                    <div class="modal-footer">
+
+                        <button id="btnSend" type="button" class="button" style="background-color: var(--color4);color:white;">Reset Password</button>
+                        <button id="btnCancel" data-dismiss="modal" class="cancel btn btn-default">Close</button>
+                    </div>
+                    <div class="optionMsg" style="text-align:center;height:20px;">
+                        <label id="lblMsgEmail" class="optionMsg">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        //Signup Modal
+
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="modal-header signup-header" style="background-color:#002244;color:white;">
+                        <h3 class="modal-title text-center" id="exampleModalCenterTitle">Sign Up</h3>
+
+                    </div>
+
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                @Html.TextBoxFor(model => model.FirstName, htmlAttributes: new
+                                {
+                                    @autofocus = "autofocus",
+                                    @class = "form-control",
+                                    @placeholder = "FirstName",
+                                    @id = "FirstName",
+                                    pattern = "^[a-zA-Z0-9-_@.]+$",
+                               oninvalid = "this.setCustomValidity('User is invalid')",
+                               oninput = "this.setCustomValidity('')"
+                                })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                @Html.TextBoxFor(model => model.LastName, htmlAttributes: new
+                                {
+                                    @autofocus = "autofocus",
+                                    @class = "form-control",
+                                    @placeholder = "LastName",
+                                    @id = "LastName",
+                                    pattern = "^[a-zA-Z0-9-_@.]+$",
+                               oninvalid = "this.setCustomValidity('User is invalid')",
+                               oninput = "this.setCustomValidity('')"
+                                })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                @Html.EditorFor(model => model.EmailAddress, new
+                                {
+                                    htmlAttributes = new
+                           {
+                                        @class = "form-control",
+                               @placeholder = "Email",
+                               @id = "email",
+                               pattern = "^[a-zA-Z0-9-_@.]+$",
+                               oninvalid = "this.setCustomValidity('Email is invalid')",
+                               oninput = "this.setCustomValidity('')"
+
+
+                           }
+
+
+                           })
+                                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                @Html.PasswordFor(model => model.Password, htmlAttributes: new { @class = "form-control", @placeholder = "Password", @id = "Pwd" })
+                                @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                @Html.PasswordFor(model => model.Password, htmlAttributes: new { @class = "form-control", @placeholder = "Confirm Password", @id = "CnfrmPwd" })
+                                @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-green" id="Signup" data-dismiss="modal" style="background-color:#002244; color:white;">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</body>
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        if ($('#txtUserName').val() != '') {
+            $('#txtPwd').focus();
+        }
+    });
+
+    $("#btnSend").attr("disabled", false).removeClass("forgotColor");
+    function FieldsIsValid() {
+        var _userName = $('#name').val();
+        //var _ProgramId = $('#ProgramId').val();
+
+        if (_userName.length == 0) {
+            $('#lblMsgEmail').empty();
+            $('#lblMsgEmail').append("Enter Userame");
+            $('#lblMsgEmail').removeClass('SeaGreenColor');
+            return false;
+        }
+
+        //if (_ProgramId.length == 0) {
+        //    $('#lblMsgEmail').empty();
+        //    $('#lblMsgEmail').append("Enter Vendor Id");
+        //    $('#lblMsgEmail').removeClass('SeaGreenColor');
+        //    return false;
+        //}
+
+        else {
+            $('#lblMsgEmail').empty();
+            return true;
+        }
+    }
+    $(".cancel").click(function () {
+        $('#myModal').on('hidden.bs.modal', function () {
+            $("#btnSend").attr("disabled", false).removeClass("forgotColor");
+
+
+            $('#name').val('');
+            //$('#ProgramId').val('');
+            $('#name').empty();
+            //$('#ProgramId').empty();
+            $('#name').removeAttr('style');
+            //$('#ProgramId').removeAttr('style');
+            $('#lblMsgEmail').empty();
+        })
+    });
+    $("#btnSend").click(function () {
+
+        var retVal = FieldsIsValid();
+
+        if (retVal == true) {
+            $("#btnSend").attr("disabled", true).addClass('forgotColor');
+            $('#lblMsgEmail').empty();
+            $('#name').text('');
+            //$('#ProgramId').text('');
+            var _userName = $('#name').val();
+            //var _ProgramId = $('#ProgramId').val();
+
+            var dateObj = new Date();
+            var month = dateObj.getUTCMonth() + 1; //months from 1-12
+            var day = dateObj.getUTCDate();
+            var year = dateObj.getUTCFullYear();
+            var time = dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
+
+            newdate = year + "/" + month + "/" + day + " " + time;
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("SendMail", "Home")',
+                data: {
+                    SignInId: _userName,
+                    //ProgramId: _ProgramId,
+                    requestedOn: newdate
+                },
+                datatype: JSON,
+                success: function (data) {
+
+                    $('#lblMsgEmail').empty();
+                    if (data.EmailMessage == "Email sent.") {
+                        $('#lblMsgEmail').append(data.EmailMessage);
+                        $('#lblMsgEmail').addClass('SeaGreenColor');
+
+                    }
+                    else {
+                        $('#lblMsgEmail').append(data.EmailMessage);
+                        $('#lblMsgEmail').removeClass('SeaGreenColor');
+                        $("#btnSend").attr("disabled", false).removeClass('forgotColor');
+                    }
+                }
+            });
+        }
+    });
+
+
+    ///Signup
+
+    $("#Signup").click(function () {
+
+
+            //$('#ProgramId').text('');
+        var FirstName = $('#FirstName').val();
+        var LastName = $('#LastName').val();
+        var EmailAddress = $('#email').val();
+        var Pwd = $('#Pwd').val();
+        var CnfrmPwd = $('#CnfrmPwd').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("SignupVerification", "Home")',
+                data: {
+                    FirstName: FirstName,
+                    LastName: LastName,
+                    EmailAddress: EmailAddress,
+                    Pwd: Pwd,
+                    CnfrmPwd: CnfrmPwd
+                },
+                datatype: JSON,
+                success: function (data) {
+
+                    $('#lblMsgEmail').empty();
+                    if (data.EmailMessage == "Email sent.") {
+                        $('#lblMsgEmail').append(data.EmailMessage);
+                        $('#lblMsgEmail').addClass('SeaGreenColor');
+
+                    }
+                    else {
+                        $('#lblMsgEmail').append(data.EmailMessage);
+                        $('#lblMsgEmail').removeClass('SeaGreenColor');
+                        $("#btnSend").attr("disabled", false).removeClass('forgotColor');
+                    }
+                }
+            });
+
+    });
+
+    $('#myModal').on('hidden.bs.modal', function () {
+        $("#btnSend").attr("disabled", false).removeClass("forgotColor");
+
+        $('#name').val('');
+        //$('#ProgramId').val('');
+        $('#name').empty();
+        //$('#ProgramId').empty();
+        $('#name').removeAttr('style');
+        //$('#ProgramId').removeAttr('style');
+        $('#lblMsgEmail').empty();
+
+    })
+     $("#btnSend").click(function () {
+
+
+    });
+
+</script>
